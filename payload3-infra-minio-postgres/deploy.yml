@@ -1,0 +1,41 @@
+- hosts: vps_dev
+  become: true
+  vars:
+    app_dir: /opt/gmx-payload
+  tasks:
+    - name: Ensure application directory exists
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy docker-compose.yml to VPS
+      ansible.builtin.copy:
+        src: docker-compose.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+
+    - name: Log into GitHub Container Registry
+      community.docker.docker_login:
+        registry_url: ghcr.io
+        username: "{{ lookup('env', 'GHCR_USERNAME') }}"
+        password: "{{ lookup('env', 'GHCR_TOKEN') }}"
+
+    - name: Pull latest Payload image
+      community.docker.docker_image:
+        name: ghcr.io/ralder123/gmx-payload/payload3:latest
+        source: pull
+
+    - name: Ensure external docker volumes exist
+      community.docker.docker_volume:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - gmx_payload_pgdata
+        - gmx_payload_miniodata
+
+    - name: Restart Docker Compose stack
+      community.docker.docker_compose_v2:
+        project_src: "{{ app_dir }}"
+        state: present
+        pull: missing
+        restarted: true

@@ -1,0 +1,84 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: gmx-postgres
+    environment:
+      POSTGRES_USER: payload_dev
+      POSTGRES_PASSWORD: payload_dev_pass
+      POSTGRES_DB: payload_dev_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "payload_dev", "-d", "payload_dev_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: gmx-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadminpassword
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: gmx-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      until /usr/bin/mc alias set localminio http://minio:9000 minioadmin minioadminpassword; do echo 'Waiting for MinIO...'; sleep 1; done;
+      /usr/bin/mc mb --ignore-existing localminio/payload-media;
+      /usr/bin/mc policy set download localminio/payload-media;
+      echo 'Bucket payload-media initialized successfully!';
+      exit 0;
+      "
+
+  payload:
+    image: ghcr.io/ralder123/gmx-payload/payload3:latest
+    container_name: gmx-payload
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      DATABASE_URL: postgresql://payload_dev:payload_dev_pass@postgres:5432/payload_dev_db
+      PAYLOAD_SECRET: change-this-to-a-long-random-secret
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: payload-media
+      S3_ACCESS_KEY_ID: minioadmin
+      S3_SECRET_ACCESS_KEY: minioadminpassword
+      S3_REGION: us-east-1
+      S3_FORCE_PATH_STYLE: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
+    external: true
+    name: gmx_payload_pgdata
+  miniodata:
+    external: true
+    name: gmx_payload_miniodata

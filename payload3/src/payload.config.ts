@@ -1,3 +1,4 @@
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import {
   BoldFeature,
@@ -38,12 +39,8 @@ export default buildConfig({
     },
     user: Users.slug,
   },
+    db: process.env.SKIP_DB_DURING_BUILD === 'true' ? sqliteAdapter({ client: { url: ':memory:' } }) : postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '' } }),
   collections: [Users, Pages, Categories, Media, Posts],
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
-  }),
   editor: lexicalEditor({
     features: () => {
       return [
