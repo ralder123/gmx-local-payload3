@@ -38,4 +38,4 @@
         project_src: "{{ app_dir }}"
         state: present
         pull: missing
-        restarted: true
+        recreate: always
