@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   minio-init:
-    image: minio/mc:latest
+    image: quay.io/minio/mc:latest
     container_name: gmx-minio-init
     depends_on:
       minio:
