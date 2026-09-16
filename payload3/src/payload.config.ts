@@ -1,4 +1,3 @@
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import {
   BoldFeature,
@@ -18,7 +17,7 @@ import { fileURLToPath } from 'url'
 import { Categories } from '@/collections/Categories'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
-import { Posts} from './collections/Posts'
+import { Posts } from './collections/Posts'
 import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
@@ -30,22 +29,15 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
       beforeLogin: ['@/components/BeforeLogin#BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
     },
     user: Users.slug,
   },
-  db:
-    process.env.SKIP_DB_DURING_BUILD === 'true'
-      ? sqliteAdapter({ client: { url: ':memory:' } })
-      : postgresAdapter({
-          pool: { connectionString: process.env.DATABASE_URL || '' },
-          push: true,
-        }),
+  db: postgresAdapter({
+    pool: { connectionString: process.env.DATABASE_URL || '' },
+    push: true,
+  }),
   collections: [Users, Pages, Categories, Media, Posts],
   editor: lexicalEditor({
     features: () => {
@@ -82,7 +74,6 @@ export default buildConfig({
       ]
     },
   }),
-  //email: nodemailerAdapter(),
   endpoints: [],
   globals: [Header, Footer],
   plugins,
@@ -90,8 +81,4 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // Sharp is now an optional dependency -
-  // if you want to resize images, crop, set focal point, etc.
-  // make sure to install it and pass it to the config.
-  // sharp,
 })

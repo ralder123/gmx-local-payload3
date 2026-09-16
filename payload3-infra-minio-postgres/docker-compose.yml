@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: gmx-postgres
+    container_name: postgres
     environment:
       POSTGRES_USER: payload_dev
       POSTGRES_PASSWORD: payload_dev_pass
@@ -19,7 +19,7 @@ services:
 
   minio:
     image: quay.io/minio/minio:latest
-    container_name: gmx-minio
+    container_name: minio
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadminpassword
@@ -38,7 +38,7 @@ services:
 
   minio-init:
     image: quay.io/minio/mc:latest
-    container_name: gmx-minio-init
+    container_name: minio-init
     depends_on:
       minio:
         condition: service_healthy
@@ -53,7 +53,7 @@ services:
 
   payload:
     image: ghcr.io/ralder123/gmx-payload/payload3:latest
-    container_name: gmx-payload
+    container_name: payload
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -61,7 +61,7 @@ services:
       NODE_ENV: production
       PORT: 3000
       HOSTNAME: 0.0.0.0
-      DATABASE_URL: postgresql://payload_dev:payload_dev_pass@gmx-postgres:5432/payload_dev_db
+      DATABASE_URL: postgresql://payload_dev:payload_dev_pass@postgres:5432/payload_dev_db
       PAYLOAD_SECRET: 6a6a65be4e85538b12da716b1ec84b640cf0d6cc573c2491460e2c4b16ea2162
       S3_ENDPOINT: http://minio:9000
       S3_BUCKET: payload-media
@@ -69,6 +69,7 @@ services:
       S3_SECRET_ACCESS_KEY: minioadminpassword
       S3_REGION: us-east-1
       S3_FORCE_PATH_STYLE: "true"
+    command: ["sh", "-c", "node server.js & sleep 3 && wget -qO- http://localhost:3000 > /dev/null 2>&1; wait"]
     depends_on:
       postgres:
         condition: service_healthy
