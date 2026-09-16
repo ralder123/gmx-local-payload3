@@ -44,7 +44,7 @@ export default buildConfig({
       ? sqliteAdapter({ client: { url: ':memory:' } })
       : postgresAdapter({
           pool: { connectionString: process.env.DATABASE_URL || '' },
-          autoSync: true,
+          push: true,
         }),
   collections: [Users, Pages, Categories, Media, Posts],
   editor: lexicalEditor({
