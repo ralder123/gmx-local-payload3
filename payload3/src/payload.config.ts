@@ -39,7 +39,13 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-    db: process.env.SKIP_DB_DURING_BUILD === 'true' ? sqliteAdapter({ client: { url: ':memory:' } }) : postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '' } }),
+  db:
+    process.env.SKIP_DB_DURING_BUILD === 'true'
+      ? sqliteAdapter({ client: { url: ':memory:' } })
+      : postgresAdapter({
+          pool: { connectionString: process.env.DATABASE_URL || '' },
+          autoSync: true,
+        }),
   collections: [Users, Pages, Categories, Media, Posts],
   editor: lexicalEditor({
     features: () => {
