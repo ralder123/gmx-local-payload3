@@ -17,11 +17,11 @@ import { fileURLToPath } from 'url'
 import { Categories } from '@/collections/Categories'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
-import { Posts } from './collections/Posts'
+import { Posts } from '@/collections/Posts'
 import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
-import { plugins } from './plugins'
+import { plugins } from '@/plugins'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,7 +36,6 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL || '' },
-    push: true,
   }),
   collections: [Users, Pages, Categories, Media, Posts],
   editor: lexicalEditor({
