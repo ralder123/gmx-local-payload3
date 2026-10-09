@@ -24,6 +24,7 @@
       community.docker.docker_image:
         name: ghcr.io/ralder123/gmx-payload/payload3:latest
         source: pull
+        force_source: true  # <--- Docker forces a fresh download of 'latest'
 
     - name: Ensure external docker volumes exist
       community.docker.docker_volume:
