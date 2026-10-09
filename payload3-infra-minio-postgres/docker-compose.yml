@@ -69,7 +69,7 @@ services:
       S3_SECRET_ACCESS_KEY: minioadminpassword
       S3_REGION: us-east-1
       S3_FORCE_PATH_STYLE: "true"
-    command: ["sh", "-c", "node server.js & sleep 3 && wget -qO- http://localhost:3000 > /dev/null 2>&1; wait"]
+    command: ["sh", "-c", "node dist/server.js migrate && node dist/server.js"]
     depends_on:
       postgres:
         condition: service_healthy
