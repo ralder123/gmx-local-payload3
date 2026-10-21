@@ -20,11 +20,11 @@ fi
 export GHCR_TOKEN
 
 echo "=============================================="
-echo "==> [4/4] Executing remote Payload migrations & restarting..."
+echo "==> [5/5] Executing remote Payload migrations & restarting..."
 echo "=============================================="
 ssh devuser1@2.24.222.86 "cd /opt/gmx-payload && \
-  docker compose exec payload pnpm payload migrate && \
-  docker compose exec payload pnpm payload generate:importmap && \
+  docker compose exec -T payload npx payload migrate && \
+  docker compose exec -T payload npx payload generate:importmap && \
   docker compose restart payload"
 
-echo "==> Deployment and migration complete successfully!":
+echo "==> Deployment and migration complete successfully!"
