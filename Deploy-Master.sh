@@ -3,9 +3,8 @@ set -e
 
 DIR="$(dirname "$0")"
 
-# Define script paths in an indexed array
+# Define script paths aligned precisely with steps 0 through 5
 steps=(
-    "" # placeholder for index 0 so step numbers align (0-5)
     "$DIR/Deploy-0-Git-Commit.sh"
     "$DIR/Deploy-1-Generate-TypeScript-Types.sh"
     "$DIR/Deploy-2-Build-Docker-Image.sh"
@@ -26,14 +25,14 @@ normalized_args=$(echo "$args" | tr ',' ' ')
 
 run_step() {
     local step_num="$1"
-    if [ "$step_num" -ge 1 ] && [ "$step_num" -le 5 ]; then
+    if [ "$step_num" -ge 0 ] && [ "$step_num" -le 5 ]; then
         local script_path="${steps[$step_num]}"
         echo "=============================================="
         echo "==> Executing Step $step_num..."
         echo "=============================================="
         "$script_path"
     else
-        echo "Error: Invalid step number '$step_num'. Valid steps are 1 through 5."
+        echo "Error: Invalid step number '$step_num'. Valid steps are 0 through 5."
         exit 1
     fi
 }
@@ -44,14 +43,14 @@ for arg in $normalized_args; do
     arg_lower=$(echo "$arg" | tr '[:upper:]' '[:lower:]')
     
     if [ "$arg_lower" == "all" ]; then
-        for i in 1 2 3 4 5; do
+        for i in 0 1 2 3 4 5; do
             run_step "$i"
         done
         exit 0
-    elif [[ "$arg" =~ ^[1-5]$ ]]; then
+    elif [[ "$arg" =~ ^[0-5]$ ]]; then
         run_step "$arg"
     else
-        echo "Error: Invalid argument '$arg'. Use 'all', or step numbers like 1, 2, 3,4 etc."
+        echo "Error: Invalid argument '$arg'. Use 'all', or step numbers like 0, 1, 2, 3, etc."
         exit 1
     fi
 done
