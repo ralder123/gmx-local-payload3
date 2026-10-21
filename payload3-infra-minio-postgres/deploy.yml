@@ -1,0 +1,81 @@
+- hosts: vps_dev
+  become: true
+  vars:
+    app_dir: /opt/gmx-payload
+  tasks:
+    # =========================================================================
+    # 1. Directory & Reverse Proxy Setup
+    # =========================================================================
+    - name: Ensure application directory exists
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure Caddyfile path is clean (remove accidental directory if Docker created one)
+      ansible.builtin.file:
+        path: "{{ app_dir }}/Caddyfile"
+        state: absent
+
+    - name: Create Caddyfile for automatic HTTPS routing
+      ansible.builtin.copy:
+        dest: "{{ app_dir }}/Caddyfile"
+        content: |
+          2.24.222.86.nip.io {
+              reverse_proxy payload:3000
+          }
+        owner: root
+        group: root
+        mode: "0644"
+
+    # =========================================================================
+    # 2. Configuration & Infrastructure Files Deployment
+    # =========================================================================
+    - name: Copy docker-compose.yml to VPS
+      ansible.builtin.copy:
+        src: docker-compose.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Copy .env file to VPS
+      ansible.builtin.copy:
+        src: .env
+        dest: "{{ app_dir }}/.env"
+        owner: root
+        group: root
+        mode: "0644"
+
+    # =========================================================================
+    # 3. Registry Authentication & Image Pulling
+    # =========================================================================
+    - name: Log into GitHub Container Registry
+      community.docker.docker_login:
+        registry_url: ghcr.io
+        username: "{{ lookup('env', 'GHCR_USERNAME') }}"
+        password: "{{ lookup('env', 'GHCR_TOKEN') }}"
+
+    - name: Pull latest Payload image
+      community.docker.docker_image:
+        name: ghcr.io/ralder123/gmx-payload/payload3:latest
+        source: pull
+        force_source: true
+
+    # =========================================================================
+    # 4. Volumes & Stack Orchestration
+    # =========================================================================
+    - name: Ensure external docker volumes exist
+      community.docker.docker_volume:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - gmx_payload_pgdata
+        - gmx_payload_miniodata
+
+    - name: Restart Docker Compose stack
+      community.docker.docker_compose_v2:
+        project_src: "{{ app_dir }}"
+        state: present
+        pull: missing
+        recreate: always
