@@ -5,8 +5,8 @@ DIR="$(dirname "$0")"
 
 # Define script paths aligned precisely with steps 0 through 5
 steps=(
-    "$DIR/Deploy-0-Git-Commit.sh"
-    "$DIR/Deploy-1-Generate-TypeScript-Types.sh"
+    "$DIR/Deploy-0-Generate-TypeScript-Types.sh"
+    "$DIR/Deploy-1-Git-Commit.sh"
     "$DIR/Deploy-2-Build-Docker-Image.sh"
     "$DIR/Deploy-3-Push-Build-Image-to-GHCR.sh"
     "$DIR/Deploy-4-Ansible-Deployment-to-VPS.sh"

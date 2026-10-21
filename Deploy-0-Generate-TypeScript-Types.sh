@@ -30,6 +30,9 @@ cd "$PROJECT_DIR/payload3"
 node -v
 pnpm -v
 
+#Clear Local Build Artifacts
+rm -rf .next dist .turbo
+
 # Generate import map, create migration, and generate types
 pnpm payload generate:importmap
 pnpm payload migrate:create --skip-empty
