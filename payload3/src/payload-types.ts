@@ -133,12 +133,10 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
-    'announcement-banner': AnnouncementBanner;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    'announcement-banner': AnnouncementBannerSelect<false> | AnnouncementBannerSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2277,29 +2275,6 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "announcement-banner".
- */
-export interface AnnouncementBanner {
-  id: number;
-  enabled?: boolean | null;
-  /**
-   * Specify which row number from the list below to show on the live site (e.g., enter 1 for the 1st row).
-   */
-  activeAnnouncementIndex?: number | null;
-  announcements?:
-    | {
-        title: string;
-        text: string;
-        linkText?: string | null;
-        linkUrl?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2486,26 +2461,6 @@ export interface FooterSelect<T extends boolean = true> {
               badgeText?: T;
               id?: T;
             };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "announcement-banner_select".
- */
-export interface AnnouncementBannerSelect<T extends boolean = true> {
-  enabled?: T;
-  activeAnnouncementIndex?: T;
-  announcements?:
-    | T
-    | {
-        title?: T;
-        text?: T;
-        linkText?: T;
-        linkUrl?: T;
-        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

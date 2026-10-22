@@ -19,7 +19,6 @@ import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { Posts } from '@/collections/Posts'
 import { Users } from '@/collections/Users'
-import { AnnouncementBanner } from '@/globals/AnnouncementBanner'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { plugins } from '@/plugins'
@@ -127,7 +126,7 @@ export default buildConfig({
   // Custom Endpoints & Globals
   // ====================================
   endpoints: [],
-  globals: [Header, Footer, AnnouncementBanner],
+  globals: [Header, Footer],
 
   // ====================================
   // Plugins & Secrets
