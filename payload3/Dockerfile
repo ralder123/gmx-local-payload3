@@ -3,14 +3,14 @@
 # Stage 1: Install dependencies
 FROM node:22-alpine AS deps
 WORKDIR /app
-RUN apk add --no-cache libc6-compat && corepack enable
+RUN apk add --no-cache libc6-compat && corepack enable && corepack prepare pnpm@9.12.3 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --dangerously-allow-all-builds
 
 # Stage 2: Build the application
 FROM node:22-alpine AS builder
 WORKDIR /app
-RUN apk add --no-cache libc6-compat && corepack enable
+RUN apk add --no-cache libc6-compat && corepack enable && corepack prepare pnpm@9.12.3 --activate
 
 # FIXED: Declare build arguments and expose them as environment variables
 # so Next.js bakes the correct nip.io URLs into the static bundle during 'pnpm run build'
