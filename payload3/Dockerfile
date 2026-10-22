@@ -5,7 +5,7 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 RUN apk add --no-cache libc6-compat && corepack enable && corepack prepare pnpm@9.12.3 --activate
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --dangerously-allow-all-builds
+RUN pnpm install --frozen-lockfile
 
 # Stage 2: Build the application
 FROM node:22-alpine AS builder
