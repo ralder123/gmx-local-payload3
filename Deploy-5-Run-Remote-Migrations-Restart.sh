@@ -23,8 +23,12 @@ echo "=============================================="
 echo "==> [5/5] Executing remote Payload migrations & restarting..."
 echo "=============================================="
 ssh devuser1@2.24.222.86 "cd /opt/gmx-payload && \
+  echo '==> [DB] Checking and applying database migrations (creating/modifying tables)...' && \
   docker compose exec -T payload npx payload migrate && \
+  echo '==> [DB] Database migrations applied successfully!' && \
+  echo '==> Generating import map...' && \
   docker compose exec -T payload npx payload generate:importmap && \
+  echo '==> Restarting Payload container...' && \
   docker compose restart payload"
 
 echo "==> Deployment and migration complete successfully!"

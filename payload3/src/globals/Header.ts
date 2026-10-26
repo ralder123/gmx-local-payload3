@@ -1,3 +1,4 @@
+// src/globals/Header.ts
 import { adminOnly } from '@/access/adminOnly'
 import type { Field, GlobalConfig } from 'payload'
 
@@ -374,7 +375,7 @@ export const Header: GlobalConfig = {
               type: 'group',
               admin: {
                 description:
-                  'Controls ticker presentation and instruments. Actual live prices require a market-data integration; the current storefront simulates updates.',
+                  'Controls ticker presentation. Precious metal items and prices are managed directly in the Metals collection.',
               },
               fields: [
                 { name: 'enabled', type: 'checkbox', defaultValue: true },
@@ -402,54 +403,7 @@ export const Header: GlobalConfig = {
                 { name: 'showChangePercent', type: 'checkbox', defaultValue: true },
                 iconField('upIcon', 'TrendingUp'),
                 iconField('downIcon', 'TrendingDown'),
-                {
-                  name: 'items',
-                  label: 'Ticker Instruments',
-                  type: 'array',
-                  defaultValue: [
-                    {
-                      label: 'GOLD',
-                      symbol: 'XAU',
-                      category: 'gold',
-                      url: '/charts?metal=gold',
-                      newTab: false,
-                    },
-                    {
-                      label: 'SILVER',
-                      symbol: 'XAG',
-                      category: 'silver',
-                      url: '/charts?metal=silver',
-                      newTab: false,
-                    },
-                    {
-                      label: 'PLATINUM',
-                      symbol: 'XPT',
-                      category: 'platinum',
-                      url: '/charts?metal=platinum',
-                      newTab: false,
-                    },
-                    {
-                      label: 'PALLADIUM',
-                      symbol: 'XPD',
-                      category: 'palladium',
-                      url: '/charts?metal=palladium',
-                      newTab: false,
-                    },
-                  ],
-                  fields: [
-                    ...linkFields(),
-                    { name: 'symbol', type: 'text', required: true },
-                    {
-                      name: 'category',
-                      type: 'select',
-                      required: true,
-                      options: metals.map((metal) => ({
-                        label: metal.toUpperCase(),
-                        value: metal,
-                      })),
-                    },
-                  ],
-                },
+                // The static 'items' array field has been removed here.
               ],
             },
           ],

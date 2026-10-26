@@ -26,11 +26,24 @@ echo "==> [0/4] Generating local Payload Import Map, Migration, & TypeScript typ
 echo "=============================================="
 cd "$PROJECT_DIR/payload3"
 
+# Load .env file automatically if it exists so Payload commands have access to DATABASE_URI
+if [ -f .env ]; then
+  echo "==> Loading environment variables from .env..."
+  set -a
+  source .env
+  set +a
+elif [ -f ../.env ]; then
+  echo "==> Loading environment variables from parent .env..."
+  set -a
+  source ../.env
+  set +a
+fi
+
 # Verify node and pnpm are visible
 node -v
 pnpm -v
 
-#Clear Local Build Artifacts
+# Clear Local Build Artifacts
 rm -rf .next dist .turbo
 
 # Generate import map, create migration, and generate types

@@ -2141,7 +2141,7 @@ export interface Header {
     collapseLabel: string;
   };
   /**
-   * Controls ticker presentation and instruments. Actual live prices require a market-data integration; the current storefront simulates updates.
+   * Controls ticker presentation. Precious metal items and prices are managed directly in the Metals collection.
    */
   ticker: {
     enabled?: boolean | null;
@@ -2182,39 +2182,6 @@ export interface Header {
           | 'TrendingUp'
           | 'TrendingDown'
         )
-      | null;
-    items?:
-      | {
-          label: string;
-          /**
-           * Internal path or HTTP(S) URL. Query parameters are preserved, e.g. /products/metals?category=gold.
-           */
-          url: string;
-          newTab?: boolean | null;
-          icon?:
-            | (
-                | 'none'
-                | 'ShoppingCart'
-                | 'Menu'
-                | 'X'
-                | 'User'
-                | 'UserPlus'
-                | 'LogIn'
-                | 'Headphones'
-                | 'PackageSearch'
-                | 'ChevronDown'
-                | 'TrendingUp'
-                | 'TrendingDown'
-              )
-            | null;
-          /**
-           * Optional supporting text for submenu links.
-           */
-          description?: string | null;
-          symbol: string;
-          category: 'gold' | 'silver' | 'platinum' | 'palladium';
-          id?: string | null;
-        }[]
       | null;
   };
   updatedAt?: string | null;
@@ -2414,18 +2381,6 @@ export interface HeaderSelect<T extends boolean = true> {
         showChangePercent?: T;
         upIcon?: T;
         downIcon?: T;
-        items?:
-          | T
-          | {
-              label?: T;
-              url?: T;
-              newTab?: T;
-              icon?: T;
-              description?: T;
-              symbol?: T;
-              category?: T;
-              id?: T;
-            };
       };
   updatedAt?: T;
   createdAt?: T;
