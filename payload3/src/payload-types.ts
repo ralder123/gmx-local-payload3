@@ -77,6 +77,7 @@ export interface Config {
     categories: Category;
     media: Media;
     posts: Post;
+    metals: Metal;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -111,6 +112,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    metals: MetalsSelect<false> | MetalsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -481,6 +483,113 @@ export interface Page {
     media?: (number | null) | Media;
   };
   layout: (
+    | {
+        slides?:
+          | {
+              title: string;
+              subtitle: string;
+              cta: string;
+              category: string;
+              brand: string;
+              weight: string;
+              form: string;
+              country: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'heroCarousel';
+      }
+    | {
+        /**
+         * Configure rows for the spot prices table (Gold, Silver, Platinum, Palladium, etc.).
+         */
+        spotPrices?:
+          | {
+              metal: string;
+              bid: string;
+              ask: string;
+              change: string;
+              isPositive: boolean;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Promotional tiles displayed beside or near the spot price table.
+         */
+        promoCards?:
+          | {
+              title: string;
+              badge?: string | null;
+              buttonText: string;
+              buttonUrl: string;
+              image?: (number | null) | Media;
+              variant?: ('gold' | 'silver' | 'brand') | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'homeMarketSection';
+      }
+    | {
+        trendingPicks?:
+          | {
+              name: string;
+              category: string;
+              brand: string;
+              country: string;
+              weight: string;
+              form: string;
+              price: string;
+              purity: string;
+              year: number;
+              supplierId: number;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'trendingPicks';
+      }
+    | {
+        deals?:
+          | {
+              name: string;
+              price: string;
+              originalPrice?: string | null;
+              discount?: string | null;
+              quantity?: string | null;
+              category: string;
+              brand: string;
+              country: string;
+              weight: string;
+              form: string;
+              supplierId: number;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'dealsOfTheWeek';
+      }
+    | {
+        features?:
+          | {
+              /**
+               * Lucide icon name (e.g. Shield, Truck, Award)
+               */
+              icon: string;
+              title: string;
+              description: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'whyChooseSection';
+      }
     | CallToActionBlock
     | ContentBlock
     | MediaBlock
@@ -1051,6 +1160,43 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "metals".
+ */
+export interface Metal {
+  id: number;
+  /**
+   * e.g., Gold, Silver, Platinum
+   */
+  name: string;
+  /**
+   * e.g., XAU, XAG, XPT
+   */
+  symbol: string;
+  /**
+   * Current market bid price
+   */
+  bid: number;
+  /**
+   * Current market ask price
+   */
+  ask: number;
+  /**
+   * Optional spread value
+   */
+  spread?: number | null;
+  /**
+   * Check to display this metal in the top menu ticker.
+   */
+  showInTicker?: boolean | null;
+  /**
+   * Priority order in the ticker (e.g., 1 for Gold, 2 for Silver).
+   */
+  tickerOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1109,6 +1255,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'metals';
+        value: number | Metal;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1251,6 +1401,109 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroCarousel?:
+          | T
+          | {
+              slides?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    cta?: T;
+                    category?: T;
+                    brand?: T;
+                    weight?: T;
+                    form?: T;
+                    country?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        homeMarketSection?:
+          | T
+          | {
+              spotPrices?:
+                | T
+                | {
+                    metal?: T;
+                    bid?: T;
+                    ask?: T;
+                    change?: T;
+                    isPositive?: T;
+                    id?: T;
+                  };
+              promoCards?:
+                | T
+                | {
+                    title?: T;
+                    badge?: T;
+                    buttonText?: T;
+                    buttonUrl?: T;
+                    image?: T;
+                    variant?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        trendingPicks?:
+          | T
+          | {
+              trendingPicks?:
+                | T
+                | {
+                    name?: T;
+                    category?: T;
+                    brand?: T;
+                    country?: T;
+                    weight?: T;
+                    form?: T;
+                    price?: T;
+                    purity?: T;
+                    year?: T;
+                    supplierId?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        dealsOfTheWeek?:
+          | T
+          | {
+              deals?:
+                | T
+                | {
+                    name?: T;
+                    price?: T;
+                    originalPrice?: T;
+                    discount?: T;
+                    quantity?: T;
+                    category?: T;
+                    brand?: T;
+                    country?: T;
+                    weight?: T;
+                    form?: T;
+                    supplierId?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        whyChooseSection?:
+          | T
+          | {
+              features?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1428,6 +1681,21 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "metals_select".
+ */
+export interface MetalsSelect<T extends boolean = true> {
+  name?: T;
+  symbol?: T;
+  bid?: T;
+  ask?: T;
+  spread?: T;
+  showInTicker?: T;
+  tickerOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }

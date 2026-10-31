@@ -10,6 +10,14 @@ import { CallToAction } from '@/blocks/CallToAction/config'
 import { Content } from '@/blocks/Content/config'
 import { FormBlock } from '@/blocks/Form/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+
+// --- Newly Added Homepage Blocks ---
+import { HeroCarouselBlock } from '@/blocks/HeroCarousel/config'
+import { HomeMarketSectionBlock } from '@/blocks/HomeMarketSection/config'
+import { TrendingPicksBlock } from '@/blocks/TrendingPicks/config'
+import { DealsOfTheWeekBlock } from '@/blocks/DealsOfTheWeek/config'
+import { WhyChooseSectionBlock } from '@/blocks/WhyChooseSection/config'
+
 import { hero } from '@/fields/hero'
 import { slugField } from 'payload'
 import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
@@ -88,6 +96,13 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               blocks: [
+                // Homepage Blocks
+                HeroCarouselBlock,
+                HomeMarketSectionBlock,
+                TrendingPicksBlock,
+                DealsOfTheWeekBlock,
+                WhyChooseSectionBlock,
+                // Existing Blocks
                 CallToAction,
                 Content,
                 MediaBlock,
@@ -120,10 +135,7 @@ export const Pages: CollectionConfig = {
 
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),

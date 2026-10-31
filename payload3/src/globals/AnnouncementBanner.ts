@@ -1,7 +1,7 @@
 import { GlobalConfig } from 'payload'
 
 export const AnnouncementBanner: GlobalConfig = {
-  slug: 'announcement-banner',
+  slug: 'announcement-banner', // <--- THIS MOUNTS THE API ROUTE AT /api/announcement-banner
   label: 'Announcement Banner',
   access: {
     read: () => true,

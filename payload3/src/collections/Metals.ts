@@ -2,7 +2,7 @@
 import type { CollectionConfig } from 'payload'
 
 export const Metals: CollectionConfig = {
-  slug: 'metals',
+  slug: 'metals', // <--- THIS MOUNTS THE API ROUTE AT /api/metals
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'symbol', 'bid', 'ask', 'spread', 'showInTicker'],

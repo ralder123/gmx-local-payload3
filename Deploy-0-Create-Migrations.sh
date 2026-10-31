@@ -46,7 +46,9 @@ pnpm -v
 # Clear Local Build Artifacts
 rm -rf .next dist .turbo
 
-# Generate import map, create migration, and generate types
+# Generate import map, create migration only if changes exist, and generate types
 pnpm payload generate:importmap
 pnpm payload migrate:create --skip-empty
 pnpm payload generate:types
+
+echo "==> [0/4] Import map, migrations, and types generated successfully!"
