@@ -3,10 +3,17 @@
 import React, { useState } from 'react'
 
 export interface HeroSlide {
+  id?: string
   title: string
   subtitle?: string
-  buttonText: string
-  buttonUrl: string
+  cta?: string
+  buttonText?: string
+  buttonUrl?: string
+  category?: string
+  brand?: string
+  weight?: string
+  form?: string
+  country?: string
   badge?: string
 }
 
@@ -22,28 +29,33 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
       title: 'Secure Your Wealth with Physical Precious Metals',
       subtitle:
         'Explore our certified selection of gold, silver, platinum, and palladium bullion bars and coins.',
-      buttonText: 'Shop All Metals',
+      cta: 'Shop All Metals',
       buttonUrl: '/products/metals',
-      badge: 'Trusted Bullion Dealer',
+      category: 'Trusted Bullion Dealer',
     },
     {
       title: '2026 American Eagle Gold & Silver Coins',
       subtitle: 'Now available for immediate delivery with fully insured shipping.',
-      buttonText: 'View New Releases',
+      cta: 'View New Releases',
       buttonUrl: '/products/new-releases',
-      badge: 'In Stock',
+      category: 'In Stock',
     },
   ]
 
   const displaySlides = slides && slides.length > 0 ? slides : defaultSlides
   const currentSlide = displaySlides[currentIndex] || displaySlides[0]
 
+  // Resolve CMS props to display values with fallbacks
+  const slideBadge = currentSlide.category || currentSlide.badge
+  const slideCtaText = currentSlide.cta || currentSlide.buttonText || 'Shop Now'
+  const slideCtaUrl = currentSlide.buttonUrl || '#'
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 text-white rounded-3xl p-8 md:p-16 my-8 shadow-xl">
       <div className="max-w-3xl">
-        {currentSlide.badge && (
+        {slideBadge && (
           <span className="inline-block px-3.5 py-1 text-xs font-semibold uppercase tracking-wider bg-amber-500/20 text-amber-400 rounded-full mb-6 border border-amber-500/30">
-            {currentSlide.badge}
+            {slideBadge}
           </span>
         )}
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
@@ -54,12 +66,34 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
             {currentSlide.subtitle}
           </p>
         )}
+
+        {/* Additional Bullion Details (from Payload Schema) */}
+        {(currentSlide.brand || currentSlide.weight || currentSlide.form) && (
+          <div className="flex flex-wrap gap-3 mb-8 text-sm text-slate-300">
+            {currentSlide.brand && (
+              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
+                Brand: {currentSlide.brand}
+              </span>
+            )}
+            {currentSlide.weight && (
+              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
+                Weight: {currentSlide.weight}
+              </span>
+            )}
+            {currentSlide.form && (
+              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
+                Form: {currentSlide.form}
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-4 items-center">
           <a
-            href={currentSlide.buttonUrl}
+            href={slideCtaUrl}
             className="px-8 py-3.5 bg-amber-500 text-slate-950 font-bold rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
           >
-            {currentSlide.buttonText}
+            {slideCtaText}
           </a>
         </div>
       </div>
