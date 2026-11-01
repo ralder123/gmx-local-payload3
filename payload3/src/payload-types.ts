@@ -489,6 +489,7 @@ export interface Page {
               title: string;
               subtitle: string;
               cta: string;
+              url: string;
               category: string;
               brand: string;
               weight: string;
@@ -512,6 +513,7 @@ export interface Page {
               ask: string;
               change: string;
               isPositive: boolean;
+              url: string;
               id?: string | null;
             }[]
           | null;
@@ -539,6 +541,7 @@ export interface Page {
               name: string;
               category: string;
               brand: string;
+              url: string;
               country: string;
               weight: string;
               form: string;
@@ -557,6 +560,7 @@ export interface Page {
         deals?:
           | {
               name: string;
+              url: string;
               price: string;
               originalPrice?: string | null;
               discount?: string | null;
@@ -1410,6 +1414,7 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     subtitle?: T;
                     cta?: T;
+                    url?: T;
                     category?: T;
                     brand?: T;
                     weight?: T;
@@ -1431,6 +1436,7 @@ export interface PagesSelect<T extends boolean = true> {
                     ask?: T;
                     change?: T;
                     isPositive?: T;
+                    url?: T;
                     id?: T;
                   };
               promoCards?:
@@ -1456,6 +1462,7 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     category?: T;
                     brand?: T;
+                    url?: T;
                     country?: T;
                     weight?: T;
                     form?: T;
@@ -1475,6 +1482,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     name?: T;
+                    url?: T;
                     price?: T;
                     originalPrice?: T;
                     discount?: T;

@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 export interface SpotPriceRow {
   metal: string
@@ -6,6 +7,7 @@ export interface SpotPriceRow {
   ask: string
   change: string
   isPositive: boolean
+  url: string
 }
 
 export interface PromoCardItem {
@@ -31,12 +33,40 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
   spotPrices = [],
   promoCards = [],
 }) => {
-  // Default mock data if none provided via CMS
+  // Default fallback data matching the exact CMS schema shape
   const defaultSpotPrices: SpotPriceRow[] = [
-    { metal: 'Gold', bid: '2,650.20', ask: '2,652.40', change: '+1.2%', isPositive: true },
-    { metal: 'Silver', bid: '31.45', ask: '31.55', change: '+2.4%', isPositive: true },
-    { metal: 'Platinum', bid: '985.00', ask: '990.00', change: '-0.4%', isPositive: false },
-    { metal: 'Palladium', bid: '1,040.00', ask: '1,055.00', change: '+0.8%', isPositive: true },
+    {
+      metal: 'Gold',
+      bid: '2,650.20',
+      ask: '2,652.40',
+      change: '+1.2%',
+      isPositive: true,
+      url: '/products/metals?category=gold',
+    },
+    {
+      metal: 'Silver',
+      bid: '31.45',
+      ask: '31.55',
+      change: '+2.4%',
+      isPositive: true,
+      url: '/products/metals?category=silver',
+    },
+    {
+      metal: 'Platinum',
+      bid: '985.00',
+      ask: '990.00',
+      change: '-0.4%',
+      isPositive: false,
+      url: '/products/metals?category=platinum',
+    },
+    {
+      metal: 'Palladium',
+      bid: '1,040.00',
+      ask: '1,055.00',
+      change: '+0.8%',
+      isPositive: true,
+      url: '/products/metals?category=palladium',
+    },
   ]
 
   const defaultPromoCards: PromoCardItem[] = [
@@ -62,7 +92,7 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
   return (
     <section className="py-12 my-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Spot Prices Table */}
+        {/* Left Column: Live Spot Prices Table */}
         <div className="lg:col-span-7 bg-card border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold tracking-tight">Live Spot Prices</h3>
@@ -82,58 +112,85 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y text-sm">
-                {displayPrices.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-muted/50 transition-colors">
-                    <td className="py-3.5 font-semibold">{row.metal}</td>
-                    <td className="py-3.5 font-mono text-muted-foreground">${row.bid}</td>
-                    <td className="py-3.5 font-mono text-muted-foreground">${row.ask}</td>
-                    <td
-                      className={`py-3.5 font-mono font-medium text-right ${row.isPositive ? 'text-emerald-600' : 'text-rose-600'}`}
+                {displayPrices.map((row, idx) => {
+                  const targetUrl = row.url || '#'
+
+                  return (
+                    <tr
+                      key={idx}
+                      className="hover:bg-muted/60 transition-colors group cursor-pointer"
                     >
-                      {row.change}
-                    </td>
-                  </tr>
-                ))}
+                      <td className="py-3.5 font-semibold">
+                        <Link
+                          href={targetUrl}
+                          className="block w-full group-hover:text-amber-500 transition-colors"
+                        >
+                          {row.metal}
+                        </Link>
+                      </td>
+                      <td className="py-3.5 font-mono text-muted-foreground">
+                        <Link href={targetUrl} className="block w-full">
+                          ${row.bid}
+                        </Link>
+                      </td>
+                      <td className="py-3.5 font-mono text-muted-foreground">
+                        <Link href={targetUrl} className="block w-full">
+                          ${row.ask}
+                        </Link>
+                      </td>
+                      <td
+                        className={`py-3.5 font-mono font-medium text-right ${
+                          row.isPositive ? 'text-emerald-600' : 'text-rose-600'
+                        }`}
+                      >
+                        <Link href={targetUrl} className="block w-full">
+                          {row.change}
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Right Column: Promo Cards Grid */}
+        {/* Right Column: Promotional Cards */}
         <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
           {displayCards.map((card, idx) => {
             const imageUrl =
               typeof card.image === 'object' && card.image !== null ? card.image.url : undefined
+            const cardUrl = card.buttonUrl || '#'
 
             return (
-              <div
+              <Link
                 key={idx}
-                className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden"
+                href={cardUrl}
+                className="group bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.01] flex flex-col justify-between relative overflow-hidden border border-slate-700/50 hover:border-amber-500/50"
               >
                 <div>
                   {card.badge && (
-                    <span className="inline-block px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 rounded-full mb-3">
+                    <span className="inline-block px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 rounded-full mb-3 border border-amber-500/30">
                       {card.badge}
                     </span>
                   )}
-                  <h4 className="text-lg font-bold mb-4">{card.title}</h4>
+                  <h4 className="text-lg font-bold mb-4 group-hover:text-amber-400 transition-colors">
+                    {card.title}
+                  </h4>
                 </div>
 
                 {imageUrl && (
                   <img
                     src={imageUrl}
                     alt={card.title}
-                    className="w-full h-32 object-cover rounded-lg mb-4 opacity-90"
+                    className="w-full h-32 object-cover rounded-lg mb-4 opacity-90 group-hover:opacity-100 transition-opacity"
                   />
                 )}
 
-                <a
-                  href={card.buttonUrl}
-                  className="inline-flex items-center justify-center px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-xl text-sm hover:bg-amber-400 transition-colors"
-                >
+                <div className="inline-flex items-center justify-center px-4 py-2 bg-amber-500 text-slate-950 font-semibold rounded-xl text-sm group-hover:bg-amber-400 transition-colors mt-2">
                   {card.buttonText}
-                </a>
-              </div>
+                </div>
+              </Link>
             )
           })}
         </div>

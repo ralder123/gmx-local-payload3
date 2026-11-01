@@ -1,20 +1,19 @@
 'use client'
 
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 export interface HeroSlide {
   id?: string
   title: string
-  subtitle?: string
-  cta?: string
-  buttonText?: string
-  buttonUrl?: string
-  category?: string
-  brand?: string
-  weight?: string
-  form?: string
-  country?: string
-  badge?: string
+  subtitle: string
+  cta: string
+  url: string
+  category: string
+  brand: string
+  weight: string
+  form: string
+  country: string
 }
 
 export interface HeroCarouselBlockProps {
@@ -26,38 +25,43 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
 
   const defaultSlides: HeroSlide[] = [
     {
-      title: 'Secure Your Wealth with Physical Precious Metals',
-      subtitle:
-        'Explore our certified selection of gold, silver, platinum, and palladium bullion bars and coins.',
-      cta: 'Shop All Metals',
-      buttonUrl: '/products/metals',
-      category: 'Trusted Bullion Dealer',
+      title: 'Gold American Eagles',
+      subtitle: "America's Official Gold Bullion Coin - Premium U.S. Mint Quality",
+      cta: 'Shop Gold Eagles',
+      url: '/products/gold-american-eagles',
+      category: 'Gold',
+      brand: 'U.S. Mint',
+      weight: '1 Oz',
+      form: 'Coin',
+      country: 'United States',
     },
     {
-      title: '2026 American Eagle Gold & Silver Coins',
-      subtitle: 'Now available for immediate delivery with fully insured shipping.',
-      cta: 'View New Releases',
-      buttonUrl: '/products/new-releases',
-      category: 'In Stock',
+      title: '2026 Canadian Silver Maple Leaf',
+      subtitle: 'World renowned 99.99% pure silver bullion with advanced security features.',
+      cta: 'Explore Silver Maples',
+      url: '/products/silver-maple-leaf',
+      category: 'Silver',
+      brand: 'Royal Canadian Mint',
+      weight: '1 Oz',
+      form: 'Coin',
+      country: 'Canada',
     },
   ]
 
   const displaySlides = slides && slides.length > 0 ? slides : defaultSlides
   const currentSlide = displaySlides[currentIndex] || displaySlides[0]
 
-  // Resolve CMS props to display values with fallbacks
-  const slideBadge = currentSlide.category || currentSlide.badge
-  const slideCtaText = currentSlide.cta || currentSlide.buttonText || 'Shop Now'
-  const slideCtaUrl = currentSlide.buttonUrl || '#'
-
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 text-white rounded-3xl p-8 md:p-16 my-8 shadow-xl">
       <div className="max-w-3xl">
-        {slideBadge && (
+        {/* Category Badge */}
+        {currentSlide.category && (
           <span className="inline-block px-3.5 py-1 text-xs font-semibold uppercase tracking-wider bg-amber-500/20 text-amber-400 rounded-full mb-6 border border-amber-500/30">
-            {slideBadge}
+            {currentSlide.category}
           </span>
         )}
+
+        {/* Title & Subtitle */}
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
           {currentSlide.title}
         </h1>
@@ -67,38 +71,42 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
           </p>
         )}
 
-        {/* Additional Bullion Details (from Payload Schema) */}
-        {(currentSlide.brand || currentSlide.weight || currentSlide.form) && (
-          <div className="flex flex-wrap gap-3 mb-8 text-sm text-slate-300">
-            {currentSlide.brand && (
-              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
-                Brand: {currentSlide.brand}
-              </span>
-            )}
-            {currentSlide.weight && (
-              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
-                Weight: {currentSlide.weight}
-              </span>
-            )}
-            {currentSlide.form && (
-              <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
-                Form: {currentSlide.form}
-              </span>
-            )}
-          </div>
-        )}
+        {/* Spec Badges (Brand, Weight, Form, Country) */}
+        <div className="flex flex-wrap gap-2.5 mb-8 text-xs font-medium text-slate-300">
+          {currentSlide.brand && (
+            <span className="bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+              {currentSlide.brand}
+            </span>
+          )}
+          {currentSlide.weight && (
+            <span className="bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+              {currentSlide.weight}
+            </span>
+          )}
+          {currentSlide.form && (
+            <span className="bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+              {currentSlide.form}
+            </span>
+          )}
+          {currentSlide.country && (
+            <span className="bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+              {currentSlide.country}
+            </span>
+          )}
+        </div>
 
+        {/* Call To Action Button with Next.js Link */}
         <div className="flex flex-wrap gap-4 items-center">
-          <a
-            href={slideCtaUrl}
+          <Link
+            href={currentSlide.url || '#'}
             className="px-8 py-3.5 bg-amber-500 text-slate-950 font-bold rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
           >
-            {slideCtaText}
-          </a>
+            {currentSlide.cta || 'Shop Now'}
+          </Link>
         </div>
       </div>
 
-      {/* Carousel Dots Indicator if multiple slides */}
+      {/* Carousel Navigation Dots */}
       {displaySlides.length > 1 && (
         <div className="flex gap-2 mt-10">
           {displaySlides.map((_, idx) => (

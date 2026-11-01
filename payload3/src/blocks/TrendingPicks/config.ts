@@ -18,6 +18,7 @@ export const TrendingPicksBlock: Block = {
         { name: 'name', type: 'text', required: true },
         { name: 'category', type: 'text', required: true },
         { name: 'brand', type: 'text', required: true },
+        { name: 'url', type: 'text', required: true, label: 'Product Detail URL' },
         { name: 'country', type: 'text', required: true },
         { name: 'weight', type: 'text', required: true },
         { name: 'form', type: 'text', required: true },

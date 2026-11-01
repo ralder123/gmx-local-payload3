@@ -18,6 +18,7 @@ export const HeroCarouselBlock: Block = {
         { name: 'title', type: 'text', required: true },
         { name: 'subtitle', type: 'text', required: true },
         { name: 'cta', type: 'text', required: true, defaultValue: 'Shop Now' },
+        { name: 'url', type: 'text', required: true, label: 'Target URL / Path' },
         { name: 'category', type: 'text', required: true },
         { name: 'brand', type: 'text', required: true },
         { name: 'weight', type: 'text', required: true },

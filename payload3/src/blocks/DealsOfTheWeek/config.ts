@@ -16,6 +16,7 @@ export const DealsOfTheWeekBlock: Block = {
       },
       fields: [
         { name: 'name', type: 'text', required: true },
+        { name: 'url', type: 'text', required: true, label: 'Deal Product URL' },
         { name: 'price', type: 'text', required: true },
         { name: 'originalPrice', type: 'text' },
         { name: 'discount', type: 'text' },

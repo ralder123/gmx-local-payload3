@@ -24,6 +24,7 @@ export const HomeMarketSectionBlock: Block = {
         { name: 'ask', type: 'text', required: true },
         { name: 'change', type: 'text', required: true },
         { name: 'isPositive', type: 'checkbox', required: true, defaultValue: true },
+        { name: 'url', type: 'text', required: true, label: 'Metal Target URL' },
       ],
     },
     {
