@@ -3,9 +3,14 @@ import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { CarouselBlock } from '@/blocks/Carousel/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { DealsOfTheWeekBlock } from '@/blocks/DealsOfTheWeek/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { HeroCarouselBlock } from '@/blocks/HeroCarousel/Component'
+import { HomeMarketSectionBlock } from '@/blocks/HomeMarketSection/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ThreeItemGridBlock } from '@/blocks/ThreeItemGrid/Component'
+import { TrendingPicksBlock } from '@/blocks/TrendingPicks/Component'
+import { WhyChooseSectionBlock } from '@/blocks/WhyChooseSection/Component'
 import { toKebabCase } from '@/utilities/toKebabCase'
 import React, { Fragment } from 'react'
 
@@ -17,9 +22,14 @@ const blockComponents = {
   carousel: CarouselBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  dealsOfTheWeek: DealsOfTheWeekBlock,
   formBlock: FormBlock,
+  heroCarousel: HeroCarouselBlock,
+  homeMarketSection: HomeMarketSectionBlock,
   mediaBlock: MediaBlock,
   threeItemGrid: ThreeItemGridBlock,
+  trendingPicks: TrendingPicksBlock,
+  whyChooseSection: WhyChooseSectionBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -36,7 +46,7 @@ export const RenderBlocks: React.FC<{
           const { blockName, blockType } = block
 
           if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
+            const Block = blockComponents[blockType as keyof typeof blockComponents]
 
             if (Block) {
               return (
