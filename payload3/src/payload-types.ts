@@ -493,11 +493,11 @@ export interface Page {
                * Leave empty to automatically build a filtered /products URL based on category, brand, weight, form, and country below.
                */
               url?: string | null;
-              category?: string | null;
-              brand?: string | null;
-              weight?: string | null;
-              form?: string | null;
-              country?: string | null;
+              category: string;
+              brand: string;
+              weight: string;
+              form: string;
+              country: string;
               id?: string | null;
             }[]
           | null;
