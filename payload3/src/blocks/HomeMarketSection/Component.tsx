@@ -13,10 +13,12 @@ export interface PromoCardItem {
   badge?: string
   buttonText: string
   buttonUrl: string
-  image?: {
-    url?: string
-    alt?: string
-  } | string
+  image?:
+    | {
+        url?: string
+        alt?: string
+      }
+    | string
   variant?: 'gold' | 'silver' | 'brand'
 }
 
@@ -34,7 +36,7 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
     { metal: 'Gold', bid: '2,650.20', ask: '2,652.40', change: '+1.2%', isPositive: true },
     { metal: 'Silver', bid: '31.45', ask: '31.55', change: '+2.4%', isPositive: true },
     { metal: 'Platinum', bid: '985.00', ask: '990.00', change: '-0.4%', isPositive: false },
-    { metal: 'Palladium',.bid: '1,040.00', ask: '1,055.00', change: '+0.8%', isPositive: true },
+    { metal: 'Palladium', bid: '1,040.00', ask: '1,055.00', change: '+0.8%', isPositive: true },
   ]
 
   const defaultPromoCards: PromoCardItem[] = [
@@ -60,7 +62,6 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
   return (
     <section className="py-12 my-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
         {/* Left Column: Spot Prices Table */}
         <div className="lg:col-span-7 bg-card border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
@@ -69,7 +70,7 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
               Live Feed
             </span>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -86,7 +87,9 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
                     <td className="py-3.5 font-semibold">{row.metal}</td>
                     <td className="py-3.5 font-mono text-muted-foreground">${row.bid}</td>
                     <td className="py-3.5 font-mono text-muted-foreground">${row.ask}</td>
-                    <td className={`py-3.5 font-mono font-medium text-right ${row.isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    <td
+                      className={`py-3.5 font-mono font-medium text-right ${row.isPositive ? 'text-emerald-600' : 'text-rose-600'}`}
+                    >
                       {row.change}
                     </td>
                   </tr>
@@ -99,11 +102,12 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
         {/* Right Column: Promo Cards Grid */}
         <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
           {displayCards.map((card, idx) => {
-            const imageUrl = typeof card.image === 'object' && card.image !== null ? card.image.url : undefined
-            
+            const imageUrl =
+              typeof card.image === 'object' && card.image !== null ? card.image.url : undefined
+
             return (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden"
               >
                 <div>
@@ -114,9 +118,13 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
                   )}
                   <h4 className="text-lg font-bold mb-4">{card.title}</h4>
                 </div>
-                
+
                 {imageUrl && (
-                  <img src={imageUrl} alt={card.title} className="w-full h-32 object-cover rounded-lg mb-4 opacity-90" />
+                  <img
+                    src={imageUrl}
+                    alt={card.title}
+                    className="w-full h-32 object-cover rounded-lg mb-4 opacity-90"
+                  />
                 )}
 
                 <a
@@ -129,7 +137,6 @@ export const HomeMarketSectionBlock: React.FC<HomeMarketSectionBlockProps> = ({
             )
           })}
         </div>
-
       </div>
     </section>
   )
