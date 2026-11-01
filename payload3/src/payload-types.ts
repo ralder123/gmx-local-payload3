@@ -489,12 +489,15 @@ export interface Page {
               title: string;
               subtitle: string;
               cta: string;
-              url: string;
-              category: string;
-              brand: string;
-              weight: string;
-              form: string;
-              country: string;
+              /**
+               * Leave empty to automatically build a filtered /products URL based on category, brand, weight, form, and country below.
+               */
+              url?: string | null;
+              category?: string | null;
+              brand?: string | null;
+              weight?: string | null;
+              form?: string | null;
+              country?: string | null;
               id?: string | null;
             }[]
           | null;

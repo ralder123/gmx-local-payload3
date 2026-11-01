@@ -8,16 +8,37 @@ export interface HeroSlide {
   title: string
   subtitle: string
   cta: string
-  url: string
-  category: string
-  brand: string
-  weight: string
-  form: string
-  country: string
+  url?: string
+  category?: string
+  brand?: string
+  weight?: string
+  form?: string
+  country?: string
 }
 
 export interface HeroCarouselBlockProps {
   slides?: HeroSlide[]
+}
+
+/**
+ * Builds dynamic target URL for slide action.
+ * Priority: Explicit slide.url > Auto-generated /products?filters URL > Default /products
+ */
+export function getSlideTargetUrl(slide: HeroSlide): string {
+  if (slide.url && slide.url.trim() !== '') {
+    return slide.url
+  }
+
+  const params = new URLSearchParams()
+
+  if (slide.category) params.set('category', slide.category)
+  if (slide.brand) params.set('brand', slide.brand)
+  if (slide.weight) params.set('weight', slide.weight)
+  if (slide.form) params.set('form', slide.form)
+  if (slide.country) params.set('country', slide.country)
+
+  const queryString = params.toString()
+  return queryString ? `/products?${queryString}` : '/products'
 }
 
 export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [] }) => {
@@ -28,7 +49,6 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
       title: 'Gold American Eagles',
       subtitle: "America's Official Gold Bullion Coin - Premium U.S. Mint Quality",
       cta: 'Shop Gold Eagles',
-      url: '/products/gold-american-eagles',
       category: 'Gold',
       brand: 'U.S. Mint',
       weight: '1 Oz',
@@ -39,7 +59,6 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
       title: '2026 Canadian Silver Maple Leaf',
       subtitle: 'World renowned 99.99% pure silver bullion with advanced security features.',
       cta: 'Explore Silver Maples',
-      url: '/products/silver-maple-leaf',
       category: 'Silver',
       brand: 'Royal Canadian Mint',
       weight: '1 Oz',
@@ -50,6 +69,7 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
 
   const displaySlides = slides && slides.length > 0 ? slides : defaultSlides
   const currentSlide = displaySlides[currentIndex] || displaySlides[0]
+  const targetUrl = getSlideTargetUrl(currentSlide)
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 text-white rounded-3xl p-8 md:p-16 my-8 shadow-xl">
@@ -98,8 +118,8 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = ({ slides = [
         {/* Call To Action Button with Next.js Link */}
         <div className="flex flex-wrap gap-4 items-center">
           <Link
-            href={currentSlide.url || '#'}
-            className="px-8 py-3.5 bg-amber-500 text-slate-950 font-bold rounded-xl hover:bg-amber-400 transition-colors shadow-lg"
+            href={targetUrl}
+            className="px-8 py-3.5 bg-amber-500 text-slate-950 font-extrabold rounded-xl hover:bg-white hover:text-slate-950 hover:shadow-xl hover:shadow-amber-500/20 active:scale-95 transition-all duration-200 shadow-lg cursor-pointer inline-block"
           >
             {currentSlide.cta || 'Shop Now'}
           </Link>
