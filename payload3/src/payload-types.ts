@@ -503,7 +503,7 @@ export interface Page {
           | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'heroCarousel';
+        blockType: 'productHeroCarousel';
       }
     | {
         /**
@@ -1408,7 +1408,7 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        heroCarousel?:
+        productHeroCarousel?:
           | T
           | {
               slides?:

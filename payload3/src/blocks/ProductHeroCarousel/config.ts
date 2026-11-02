@@ -1,10 +1,10 @@
 import type { Block } from 'payload'
 
 export const HeroCarouselBlock: Block = {
-  slug: 'heroCarousel',
+  slug: 'productHeroCarousel',
   labels: {
-    singular: 'Hero Carousel',
-    plural: 'Hero Carousels',
+    singular: 'Product Hero Carousel',
+    plural: 'Product Hero Carousels',
   },
   fields: [
     {

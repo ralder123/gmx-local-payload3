@@ -5,6 +5,7 @@ import * as migration_20261026_020638 from './20261026_020638';
 import * as migration_20261026_040753_create_metals_collection from './20261026_040753_create_metals_collection';
 import * as migration_20261031_213217 from './20261031_213217';
 import * as migration_20261101_201101 from './20261101_201101';
+import * as migration_20261102_030928 from './20261102_030928';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20261101_201101.up,
     down: migration_20261101_201101.down,
-    name: '20261101_201101'
+    name: '20261101_201101',
+  },
+  {
+    up: migration_20261102_030928.up,
+    down: migration_20261102_030928.down,
+    name: '20261102_030928'
   },
 ];
